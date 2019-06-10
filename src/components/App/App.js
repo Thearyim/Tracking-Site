@@ -8,6 +8,7 @@ function App(){
       <style jsx>{`
 
       `}</style>
+
           <div>
               <HeaderContainer />
               <HomeContainer />
