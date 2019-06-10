@@ -1,7 +1,5 @@
 import React from 'react';
-
-
-
+import AdminFormPage from './Admin/AdminFormPage.js';
 
 function App(){
   return (
@@ -10,7 +8,7 @@ function App(){
 
       `}</style>
       <div>
-        <h1>Hi</h1>
+        <AdminFormPage/>
       </div>
     </div>
   );
