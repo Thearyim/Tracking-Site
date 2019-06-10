@@ -13,7 +13,8 @@
  * > Can see number of days the sites been live or since last time down.
 
  ##  Component Structure
-  ![Alt text](‎⁨Macintosh HD⁩ ▸ ⁨Users⁩ ▸ ⁨jimmy⁩ ▸ ⁨Desktop⁩ "Title")
+  ![Alt text](https://docs.google.com/presentation/d/1gE5jT9xzQUwhgOUdIIBxEU6iZ8Za5N-x29ryquG1BaA/edit
+https://docs.google.com/presentation/u/0/d/1gE5jT9xzQUwhgOUdIIBxEU6iZ8Za5N-x29ryquG1BaA/export/png?id=1gE5jT9xzQUwhgOUdIIBxEU6iZ8Za5N-x29ryquG1BaA&pageid=p "Title")
 
 
  ### Languages/Libararies Used
