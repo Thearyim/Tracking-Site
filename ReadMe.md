@@ -15,7 +15,6 @@
  ##  Component Structure
   ![Screenshot](Images/Chart.png)
 
-
  ### Languages/Libararies Used
  * HTML
  * Javascript
