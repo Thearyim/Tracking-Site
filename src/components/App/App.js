@@ -1,5 +1,6 @@
 import React from 'react';
-import AdminFormPage from './Admin/AdminFormPage.js';
+import HeaderContainer from './Header/HeaderContainer.js';
+import HomeContainer from './Home/HomeContainer.js';
 
 function App(){
   return (
@@ -7,8 +8,10 @@ function App(){
       <style jsx>{`
 
       `}</style>
-      <div>
-        <AdminFormPage/>
+
+          <div>
+              <HeaderContainer />
+              <HomeContainer />
       </div>
     </div>
   );
