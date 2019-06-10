@@ -13,8 +13,7 @@
  * > Can see number of days the sites been live or since last time down.
 
  ##  Component Structure
-              |         | App.js |         |
- |    Header     |  Site      | Statues | Days Live  |
+  ![Alt text](‎⁨Macintosh HD⁩ ▸ ⁨Users⁩ ▸ ⁨jimmy⁩ ▸ ⁨Desktop⁩ "Title")
 
 
  ### Languages/Libararies Used
