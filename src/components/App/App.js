@@ -1,7 +1,6 @@
 import React from 'react';
-
-
-
+import HeaderContainer from './Header/HeaderContainer.js';
+import HomeContainer from './Home/HomeContainer.js';
 
 function App(){
   return (
@@ -9,8 +8,9 @@ function App(){
       <style jsx>{`
 
       `}</style>
-      <div>
-        <h1>Hi</h1>
+          <div>
+              <HeaderContainer />
+              <HomeContainer />
       </div>
     </div>
   );
