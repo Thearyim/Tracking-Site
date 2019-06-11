@@ -12,7 +12,7 @@ const HeaderContainer = () => {
                 <div className="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul className="navbar-nav">
                         <li className="nav-item active">
-                            <Link className="nav-link" to="/">Admin</Link>
+                            <Link className="nav-link" to="/AdminLogIn">Admin</Link>
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link" to="/realTime">Real Time</Link>
