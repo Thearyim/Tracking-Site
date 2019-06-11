@@ -24,6 +24,11 @@ class MockData {
                 id: 2,
                 name: 'Site 2',
                 url: 'url: Event 2'
+            },
+            {
+                id: 3,
+                name: 'Site 3',
+                url: 'url: Event 3'
             }
         ]
     }
@@ -33,14 +38,20 @@ class MockData {
             {
                 id: 1,
                 name: 'Site 1',
-                status: 'Description: Event 1',
-                lastPing: 'Description: Event 1'
+                status: 'Status: Online',
+                lastPing: 'Last Ping: 2019-06-11T00:00:00.0000000Z'
             },
             {
                 id: 2,
                 name: 'Site 2',
-                status: 'Description: Event 2',
-                lastPing: 'Description: Event 1'
+                status: 'Status: Offline',
+                lastPing: 'Last Ping: 2019-06-11T00:00:00.0000000Z'
+            },
+            {
+                id: 3,
+                name: 'Site 3',
+                status: 'Status: Online',
+                lastPing: 'Last Ping: 2019-06-11T00:00:00.0000000Z'
             }
         ]
     }

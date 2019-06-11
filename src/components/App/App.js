@@ -2,7 +2,6 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import HeaderContainer from './Header/HeaderContainer.js';
 import HomeContainer from './Home/HomeContainer.js';
-import RealTimeContainer from './RealTime/RealTimeContainer.js';
 
 function App(){
   return (
@@ -13,13 +12,11 @@ function App(){
 
           <div>
               <HeaderContainer />
-              <HomeContainer />
               <Switch>
-                  
                   <Route
-                      path="/realtime"
+                      path="/"
                       render={(props) => (
-                          <RealTimeContainer />
+                          <HomeContainer />
                       )}
                   />
               </Switch>
