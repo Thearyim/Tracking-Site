@@ -10,7 +10,7 @@ function AdminFormPage(){
       `}</style>
 <div>
 <form className="body">
-  <h3>URL</h3>
+  <h3></h3>
           <input
             type='text'
             id='url'
@@ -20,7 +20,7 @@ function AdminFormPage(){
           <textarea
             type='text'
             id='email'
-            placeholder='Email'/>
+            placeholder='Email' required/>
           <br/>
           <button type='submit'>Add</button>
         </form>

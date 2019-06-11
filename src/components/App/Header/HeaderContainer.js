@@ -11,11 +11,12 @@ const HeaderContainer = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul className="navbar-nav">
+                        <li className="nav-item active">
+                            <Link className="nav-link" to="/AdminLogIn">Admin</Link>
+                        </li>
+
                         <li className="nav-item">
                             <Link className="nav-link" to="/">Home</Link>
-                        </li>
-                        <li className="nav-item active">
-                            <Link className="nav-link" to="/Admin">Admin</Link>
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link" to="/viewReport">View Reports</Link>
