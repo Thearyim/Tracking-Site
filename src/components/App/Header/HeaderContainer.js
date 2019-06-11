@@ -14,8 +14,9 @@ const HeaderContainer = () => {
                         <li className="nav-item active">
                             <Link className="nav-link" to="/AdminLogIn">Admin</Link>
                         </li>
+
                         <li className="nav-item">
-                            <Link className="nav-link" to="/realTime">Real Time</Link>
+                            <Link className="nav-link" to="/">Home</Link>
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link" to="/viewReport">View Reports</Link>

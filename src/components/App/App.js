@@ -15,12 +15,11 @@ function App(){
 
           <div>
               <HeaderContainer />
-              <HomeContainer />
               <Switch>
                   <Route
-                      path="/realtime"
+                      path="/"
                       render={(props) => (
-                          <RealTimeContainer />
+                          <HomeContainer />
                       )}
                   />
                   <Route path="/AdminLogIn" render={(props)=>(<AdminLogIn/>)}/>
