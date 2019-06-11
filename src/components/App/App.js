@@ -2,22 +2,16 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import HeaderContainer from './Header/HeaderContainer.js';
 import HomeContainer from './Home/HomeContainer.js';
-import RealTimeContainer from './RealTime/RealTimeContainer.js';
 import AdminLogIn from './Admin/AdminLogIn.js';
 import AdminFormPage from './Admin/AdminFormPage.js';
 
 function App(){
   return (
-    <div>
-      <style jsx>{`
-
-      `}</style>
-
           <div>
               <HeaderContainer />
               <Switch>
                   <Route
-                      path="/"
+                      exact path="/"
                       render={(props) => (
                           <HomeContainer />
                       )}
@@ -26,7 +20,6 @@ function App(){
                   <Route path="/AdminFormPage" render={(props)=>(<AdminFormPage/>)}/>
               </Switch>
       </div>
-    </div>
   );
 }
 
