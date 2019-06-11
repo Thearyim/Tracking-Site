@@ -4,7 +4,11 @@
     "\\src",
     "\\src\\components",
     "\\src\\components\\App",
-    "\\src\\components\\App\\Header"
+    "\\src\\components\\App\\Admin",
+    "\\src\\components\\App\\Header",
+    "\\src\\components\\App\\Home",
+    "\\src\\components\\App\\RealTime",
+    "\\src\\js"
   ],
   "SelectedNode": "\\src\\components\\App\\App.js",
   "PreviewInSolutionExplorer": false
