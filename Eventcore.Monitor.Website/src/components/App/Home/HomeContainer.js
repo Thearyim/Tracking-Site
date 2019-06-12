@@ -47,7 +47,7 @@ const HomeContainer = () => {
         var sites = [];
         var siteRef = database.ref('/site/');
         
-        siteRef.once('value', function(snap) {
+        siteRef.on('value', function(snap) {
             snap.forEach(function(item) {
                 var itemVal = item.val();
                 console.log(itemVal);
@@ -64,7 +64,7 @@ const HomeContainer = () => {
                 getSiteState().map((item, key) => {
                     let siteStatus = parseInt(item.status);
                     let tileStyle = (siteStatus == 200) ? greenTile : redTile;
-                    alert("refresh");
+                    //alert("refresh");
                     
                     return ([
                         <div key={item.id} style={tileStyle}>
