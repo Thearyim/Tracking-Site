@@ -13,7 +13,7 @@ function AdminLogIn(){
       }
       `}</style>
 <div>
-<form className="body">
+<form className="body" onSubmit={this.checkName}>
       <h2>Only Admins can Sign In!</h2>
   <h3>User Name</h3>
           <input
