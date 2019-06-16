@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventcore.Telemetry.Api", "Eventcore.Telemetry.Api\Eventcore.Telemetry.Api.csproj", "{E8EED49E-455D-46F9-8D33-758446970D62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventcore.Monitoring.SyntheticTransactionService", "Eventcore.Monitoring.SyntheticTransactionService\Eventcore.Monitoring.SyntheticTransactionService.csproj", "{1EF4E0B2-45AD-4321-8852-FEE7888503A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventcore.Monitoring.SyntheticTransactionService", "Eventcore.Monitoring.SyntheticTransactionService\Eventcore.Monitoring.SyntheticTransactionService.csproj", "{1EF4E0B2-45AD-4321-8852-FEE7888503A9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventcore.Monitoring.Website", "Eventcore.Monitoring.Website\Eventcore.Monitoring.Website.csproj", "{15EDC1E7-9495-47ED-976B-35C293F6F1DC}"
 EndProject
