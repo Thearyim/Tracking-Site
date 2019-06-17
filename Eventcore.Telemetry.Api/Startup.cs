@@ -41,6 +41,7 @@ namespace Eventcore.Telemetry.Api
                 .Build();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSingleton<DirectoryInfo>(new DirectoryInfo(Path.Combine(apiAssemblyDirectory, "Configuration")));
             services.AddSingleton<ITelemetryDataStore<IDictionary<string, object>>>(this.CreateDataStore(configuration));
         }
 
