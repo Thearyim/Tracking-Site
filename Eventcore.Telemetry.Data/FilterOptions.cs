@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace Eventcore.Telemetry.Api.Data
+namespace Eventcore.Telemetry.Data
 {
     /// <summary>
     /// Provides search filter options to apply to telemetry data

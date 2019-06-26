@@ -1,13 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Eventcore.Monitoring.SyntheticTransactionService
 {
@@ -40,7 +45,6 @@ namespace Eventcore.Monitoring.SyntheticTransactionService
             catch (Exception exc)
             {
                 Program.Logger.LogError(exc.Message);
-                throw;
             }
         }
 
@@ -49,15 +53,22 @@ namespace Eventcore.Monitoring.SyntheticTransactionService
             return new HostBuilder()
                 .ConfigureAppConfiguration((hostContext, config) =>
                 {
+                    Program.Logger.LogInformation("Creating synthetic transaction service host...");
+
                     // Add configuration settings defined in *.appsettings.json file.
                     IConfiguration hostConfiguration = new ConfigurationBuilder()
                         .AddJsonFile(
                             Path.Combine(
                                 Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-                                $"appsettings.json"))
+                                $"appsettings.json"))              
                         .Build();
 
-                    Program.Configuration = hostConfiguration;
+                    IConfiguration syntheticTransactionConfiguration = Program.GetSyntheticTransactionConfiguration(hostConfiguration);
+
+                    Program.Configuration = new ConfigurationBuilder()
+                        .AddConfiguration(hostConfiguration)
+                        .AddConfiguration(syntheticTransactionConfiguration)
+                        .Build();
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
@@ -67,11 +78,47 @@ namespace Eventcore.Monitoring.SyntheticTransactionService
                 .Build();
         }
 
+        private static IConfiguration GetSyntheticTransactionConfiguration(IConfiguration hostConfiguration)
+        {
+            IConfiguration configuration = null;
+
+            string environment = hostConfiguration.GetValue<string>(Constants.ConfigurationEnvironment);
+            Uri configurationApiUri = new Uri($"{hostConfiguration.GetValue<string>(Constants.ConfigurationApiUrl)}/{environment}");
+
+            Program.Logger.LogInformation($"Loading synthetic transaction configuration settings.");
+            Program.Logger.LogInformation($"Configuration API: {configurationApiUri}");
+
+            using (HttpClient configurationClient = new HttpClient())
+            {
+                HttpResponseMessage response = configurationClient.GetAsync(configurationApiUri)
+                    .GetAwaiter().GetResult();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonContent = response.Content.ReadAsStringAsync()
+                        .GetAwaiter().GetResult();
+
+                    IDictionary<string, string> settings = new Dictionary<string, string>
+                    {
+                        [Constants.SyntheticTransactions] = JToken.Parse(jsonContent).SelectToken(Constants.SyntheticTransactions).ToString()
+                    };
+
+                    configuration = new ConfigurationBuilder()
+                        .AddInMemoryCollection(settings)
+                        .Build();
+                }
+            }
+
+            return configuration;
+        }
+
         private static void SetupLogging()
         {
             //LoggerFactory loggerFactory = new LoggerFactory();
             //loggerFactory.AddProvider(new Conso)
-            Program.Logger = NullLogger.Instance;
+            LoggerFactory loggerFactory = new LoggerFactory();
+            loggerFactory.AddConsole();
+            Program.Logger = loggerFactory.CreateLogger("SyntheticTransactions");
         }
     }
 }

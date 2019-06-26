@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace Eventcore.Telemetry.Api.Data
+namespace Eventcore.Telemetry.Data
 {
     /// <summary>
     /// Provides methods for reading, writing and managing monitoring data

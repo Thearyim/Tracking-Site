@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 
-namespace Eventcore.Telemetry.Api.Data
+namespace Eventcore.Telemetry.Data
 {
     /// <summary>
     /// Provides methods for reading and writing telemetry event data to

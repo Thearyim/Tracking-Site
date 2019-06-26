@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Eventcore.Monitoring.SyntheticTransactionService.Transactions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Eventcore.Monitoring.SyntheticTransactionService
 {
@@ -31,10 +33,13 @@ namespace Eventcore.Monitoring.SyntheticTransactionService
                 new WebsiteAvailabilityCheck()
             };
 
+            Program.Logger.LogInformation(
+                $"Executing synthetic transactions:\n{string.Join('\n', syntheticTransactions.Select(trx => trx.GetType().Name))}");
+
             List<Task> syntheticTransactionTasks = new List<Task>();
 
             foreach (ISyntheticTransaction transaction in syntheticTransactions)
-            {
+            {         
                 syntheticTransactionTasks.Add(transaction.ExecuteAsync(configuration, cancellationToken));
             }
 

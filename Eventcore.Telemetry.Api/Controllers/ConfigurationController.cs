@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Eventcore.Telemetry.Api.Data;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 
@@ -83,10 +81,10 @@ namespace Eventcore.Telemetry.Api.Controllers
 
                 try
                 {
-                    JToken configurationId = configuration.GetValue("id");
+                    JToken configurationId = configuration.GetValue("Id");
                     if (configurationId == null)
                     {
-                        this.BadRequest("A configuration ID is required. The JSON document provided must contain an 'id' property.");
+                        result = this.BadRequest("A configuration ID is required. The JSON document provided must contain an 'Id' property.");
                     }
                     else
                     {

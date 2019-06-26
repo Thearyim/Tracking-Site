@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Eventcore.Telemetry.Api.Data;
+using Eventcore.Telemetry.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Eventcore.Telemetry.Api.Controllers

@@ -9,6 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventcore.Monitoring.Synthe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventcore.Monitoring.Website", "Eventcore.Monitoring.Website\Eventcore.Monitoring.Website.csproj", "{15EDC1E7-9495-47ED-976B-35C293F6F1DC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D13AA382-49FF-4990-97E0-4CB22D3E5F56}"
+	ProjectSection(SolutionItems) = preProject
+		ReadMe.md = ReadMe.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventcore.Telemetry.Data", "Eventcore.Telemetry.Data\Eventcore.Telemetry.Data.csproj", "{36FD26C2-51B4-4386-ACF0-9D84DCED5438}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +34,10 @@ Global
 		{15EDC1E7-9495-47ED-976B-35C293F6F1DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15EDC1E7-9495-47ED-976B-35C293F6F1DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15EDC1E7-9495-47ED-976B-35C293F6F1DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36FD26C2-51B4-4386-ACF0-9D84DCED5438}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36FD26C2-51B4-4386-ACF0-9D84DCED5438}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36FD26C2-51B4-4386-ACF0-9D84DCED5438}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36FD26C2-51B4-4386-ACF0-9D84DCED5438}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

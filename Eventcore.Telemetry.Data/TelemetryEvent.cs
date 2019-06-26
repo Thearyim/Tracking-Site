@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Eventcore.Telemetry.Api.Data
+namespace Eventcore.Telemetry.Data
 {
     /// <summary>
     /// Represents the details of a telemetry event.

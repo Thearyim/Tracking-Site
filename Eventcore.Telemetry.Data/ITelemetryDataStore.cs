@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Eventcore.Telemetry.Api.Data
+namespace Eventcore.Telemetry.Data
 {
     /// <summary>
     /// Provides methods for reading and writing telemetry data to a backing
