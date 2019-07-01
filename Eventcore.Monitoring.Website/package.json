@@ -4,9 +4,11 @@
   "description": "tracking-site",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server",
-    "build": "webpack -p --display-error-details --color"
+    "build": "webpack --progress --colors --output-path ./build --mode development",
+    "build:dev": "webpack --progress --colors --output-path ./build --mode production",
+    "linter": "eslint --ignore-path .gitignore ./",
+    "test": "karma start --single-run --log-level debug"
   },
   "repository": {
     "type": "git",
@@ -24,6 +26,8 @@
     "react-bootstrap": "^0.32.4",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",
+    "react-redux": "^7.1.0",
+    "redux": "^4.0.1",
     "showdown": "^1.9.0",
     "uuid": "^3.2.1",
     "firebase": "^6.1.1"
@@ -41,6 +45,7 @@
     "react-hot-loader": "^3.0.0-beta.7",
     "typescript": "^3.4.5",
     "style-loader": "^0.23.1",
+    "ts-loader": "^6.0.4",
     "url-loader": "^0.6.2",
     "webpack": "^4.31.0",
     "webpack-cli": "^3.3.2",

@@ -1,20 +1,23 @@
-import React from 'react';
-import firebase from '../../../../.firebase/firebase.js';
+import React, { useState } from 'react';
+import TelemetryClient from 'TelemetryApiClient';
 
-const HomeContainer = () => {
+var telemetryClient = new TelemetryClient('http://127.0.0.1:5000');
 
-    var database = firebase.database();
+class HomeContainer extends Component {
 
-    //function writeUserData(id, name, status, lastPing) {
-    //    firebase.database().ref('users/' + userId).set({
-    //        id: 1,
-    //        name: 'Site 1',
-    //        status: 'Status: Online',
-    //        lastPing: 'Last Ping: 2019-06-11T00:00:00.0000000Z'
-    //    });
-    //}
+    constructor(props) {
+        super(props);
+    }
 
-    var greenTile = {
+    // var telemetryClient = new TelemetryClient('http://127.0.0.1:5000');
+
+    //const [latestEvents, setLatestEvents] = useState(async () => {
+    //    var initialEvents = await getTelemetryEvents();
+    //    console.log(`Initial Events: ${initialEvents.data.length}`)
+    //    return initialEvents;
+    //});
+
+    greenTile = {
         color: 'white',
         border: '1px solid black',
         borderRadius: '4px',
@@ -24,7 +27,7 @@ const HomeContainer = () => {
         float: 'left'
     };
 
-    var redTile = {
+    redTile = {
         color: 'white',
         border: '1px solid black',
         borderRadius: '4px',
@@ -34,62 +37,80 @@ const HomeContainer = () => {
         float: 'left'
     };
 
-    var keyCell = {
+    keyCell = {
         borderRight: '1px solid white',
         padding: '5px'
     };
 
-    var valueCell = {
+    valueCell = {
         padding: '5px'
     };
 
-    function getSiteState() {
-        var sites = [];
-        var siteRef = database.ref('/site/');
-        
-        siteRef.on('value', function(snap) {
-            snap.forEach(function(item) {
-                var itemVal = item.val();
-                console.log(itemVal);
-                sites.push(itemVal);
-            });
-        });
-
-        return sites;
+    componentWillMount() {
+        console.log("Here");
     }
 
-    return (
-        <div>
-            {
-                getSiteState().map((item, key) => {
-                    let siteStatus = parseInt(item.status);
-                    let tileStyle = (siteStatus == 200) ? greenTile : redTile;
-                    //alert("refresh");
-                    
-                    return ([
-                        <div key={item.id} style={tileStyle}>
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td style={keyCell}>Uri</td>
-                                        <td style={valueCell}>{item.uri}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style={keyCell}>Status</td>
-                                        <td style={valueCell}>{item.status}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style={keyCell}>Last Checked</td>
-                                        <td style={valueCell}>{item.lastChecked}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    ])
+    async getTelemetryEvents() {
+        var events = await telemetryClient.getLatestEvents('WebsiteAvailabilityCheck');
+        // console.log(`Data: ${JSON.stringify(events.data)}`);
+
+        //for (var i = 0; i < events.data.length; i++) {
+        //    console.log(events.data[i]);
+        //}
+
+        return events;
+    }
+
+
+    render() {
+        if (latestEvents != null) {
+        return (
+            <div>
+                {
+                    /*
+                       Example JSON Structure
+                       {
+                          "eventName": "WebsiteAvailabilityCheck",
+                          "correlationId": "e6898fce-6151-4bb0-8000-4debb772d548",
+                          "timestamp": "2019-06-28T21:54:52",
+                          "context": {
+                              "url": "https://www.eventcore.com",
+                              "status": "OK",
+                              "statusCode": 200
+                          }
+                       }
+                     */
+                    // latestEvents.data.map((item, key) => {
+                    // let siteStatus = parseInt(item.context.statusCode);
+                    // let tileStyle = (siteStatus == 200) ? greenTile : redTile;
+                    <div style={greenTile}>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td style={keyCell}>Uri</td>
+                                    <td style={valueCell}>{latestEvents.data[0].context.url}</td>
+                                </tr>
+                                <tr>
+                                    <td style={keyCell}>Status</td>
+                                    <td style={valueCell}>{latestEvents.data[0].context.statusCode}-{latestEvents.data[0].context.status}</td>
+                                </tr>
+                                <tr>
+                                    <td style={keyCell}>Last Checked</td>
+                                    <td style={valueCell}>{latestEvents.data[0].timestamp}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    // })
                 }
-            )}
-        </div>
-    );
+            </div>);
+        }
+        else {
+            return (
+                <div>No telemetry events found...</div>
+            );
+        }
+    }
 }
 
 export default HomeContainer;

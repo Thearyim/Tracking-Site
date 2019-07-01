@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Eventcore.Telemetry.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 
 namespace Eventcore.Telemetry.Api.Controllers
 {
@@ -32,6 +33,8 @@ namespace Eventcore.Telemetry.Api.Controllers
 
             try
             {
+                this.AddCrossOriginHeaders();
+
                 FilterOptions filter = new FilterOptions(eventName, correlationId, latest);
                 IEnumerable<TelemetryEvent<IDictionary<string, object>>> events = await this.DataStore.SearchDataAsync(filter)
                     .ConfigureAwait(false);
@@ -57,7 +60,8 @@ namespace Eventcore.Telemetry.Api.Controllers
         //    'correlationId': 'e915e981-92ae-4968-84c1-52437f3c265a',
         //    'timestamp' : '2019-06-11T00:00:00.0000000Z',
         //    'context': {
-        //      'status' : 200,
+        //      'status' : 'OK',
+        //      'statusCode': 200,
         //      'url' : 'https://www.eventcore.com/'
         //    }
         // }
@@ -65,9 +69,11 @@ namespace Eventcore.Telemetry.Api.Controllers
         public async Task<IActionResult> WriteEventAsync([FromBody] TelemetryEvent<IDictionary<string, object>> telemetryEvent)
         {
             IActionResult result = null;
-            
+
             try
             {
+                this.AddCrossOriginHeaders();
+
                 await this.DataStore.CreateDataAsync(telemetryEvent).ConfigureAwait(false);
                 result = this.Ok();
             }
@@ -80,6 +86,28 @@ namespace Eventcore.Telemetry.Api.Controllers
             }
 
             return result;
+        }
+
+        private void AddCrossOriginHeaders()
+        {
+            const string allowOriginHeader = "Access-Control-Allow-Origin";
+            const string allowMethodsHeader = "Access-Control-Allow-Methods";
+            const string allowHeadersHeader = "Access-Control-Allow-Headers";
+
+            if (!this.Response.Headers.ContainsKey(allowOriginHeader))
+            {
+                this.Response.Headers.Add(allowOriginHeader, new StringValues("http://localhost:8080"));
+            }
+
+            if (!this.Response.Headers.ContainsKey(allowMethodsHeader))
+            {
+                this.Response.Headers.Add(allowMethodsHeader, new StringValues(new string[] { "GET", "POST" }));
+            }
+
+            if (!this.Response.Headers.ContainsKey(allowHeadersHeader))
+            {
+                this.Response.Headers.Add(allowHeadersHeader, new StringValues("Content-Type"));
+            }
         }
     }
 }
