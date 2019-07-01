@@ -1,5 +1,5 @@
 # Webpage Status
-## Jimmy Zebroski, Theary Im
+## Theary Im
 
 ## Description A web application used to check the status of websites made by eventcore.
 
