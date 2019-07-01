@@ -53,21 +53,34 @@ namespace Eventcore.Monitoring.SyntheticTransactionService.Transactions
                         {
                             if (!cancellationToken.IsCancellationRequested)
                             {
-                                HttpResponseMessage response = await this.ExecuteSiteAvailabilityCheckAsync(httpClient, site, cancellationToken)
-                                    .ConfigureAwait(false);
+                                HttpResponseMessage response = null;
+
+                                try
+                                {
+                                    response = await this.ExecuteSiteAvailabilityCheckAsync(httpClient, site, cancellationToken)
+                                        .ConfigureAwait(false);
+                                }
+                                catch (HttpRequestException exc)
+                                {
+                                    Program.Logger.LogError($"{typeof(WebsiteAvailabilityCheck).Name} REQUEST ERROR: {exc.Message}");
+                                    response = new HttpResponseMessage(System.Net.HttpStatusCode.NotFound);
+                                }
 
                                 await this.WriteTelemetryAsync(httpClient, response, site, correlationId, cancellationToken)
                                     .ConfigureAwait(false);
                             }
                         }
 
-                        Task.Delay(runInterval).GetAwaiter().GetResult();
                         Program.Logger.LogInformation($"{typeof(WebsiteAvailabilityCheck).Name}: Execution complete.");
                     }
                     catch (Exception exc)
                     {
                         // An error occurred while trying to call the site.
                         Program.Logger.LogError($"{typeof(WebsiteAvailabilityCheck).Name} ERROR: {exc.Message}");
+                    }
+                    finally
+                    {
+                        Task.Delay(runInterval, cancellationToken).GetAwaiter().GetResult();
                     }
                 }
             }

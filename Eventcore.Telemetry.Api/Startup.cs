@@ -20,9 +20,6 @@ namespace Eventcore.Telemetry.Api
         private const string StorageDirectorySetting = "StorageDirectory";
         private const string UseStoreSetting = "UseStore";
 
-        // private const string DatabaseUrlSetting = "DatabaseURL";
-        // private const string FirebaseSection = "Firebase";
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -73,9 +70,9 @@ namespace Eventcore.Telemetry.Api
             {
                 // Use Firebase Data Store
                 IConfigurationSection mySqlSettings = datastoreSettings.GetSection(Startup.MySqlSection);
-                MySqlConnection connection = new MySqlConnection(mySqlSettings.GetValue<string>(Startup.ConnectionStringSetting));
+                string connectionString = mySqlSettings.GetValue<string>(Startup.ConnectionStringSetting);
 
-                dataStore = new SqlTelemetryDataStore<IDictionary<string, object>>(connection);
+                dataStore = new SqlTelemetryDataStore<IDictionary<string, object>>(connectionString);
             }
             else if (useDataStore == Startup.FileSystemSection)
             {

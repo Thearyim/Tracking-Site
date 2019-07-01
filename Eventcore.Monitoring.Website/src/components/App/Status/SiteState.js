@@ -7,7 +7,7 @@ function SiteState({ event }) {
         border: '1px solid black',
         borderRadius: '4px',
         backgroundColor: 'green',
-        width: '700px',
+        width: '400px',
         margin: '20px',
         float: 'left'
     };
@@ -17,7 +17,7 @@ function SiteState({ event }) {
         border: '1px solid black',
         borderRadius: '4px',
         backgroundColor: 'red',
-        width: '700px',
+        width: '400px',
         margin: '20px',
         float: 'left'
     };

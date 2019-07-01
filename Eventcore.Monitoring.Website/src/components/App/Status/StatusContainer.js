@@ -43,10 +43,14 @@ function StatusContainer({ state, actions, apiUri }) {
     setEventRefresh();
 
     var eventCount = 0;
+    var containerStyle = {
+        display: 'flex',
+        flexWrap: 'wrap'
+    };
 
     if (state.events != null && state.events.data != null && state.events.data.length > 0) {
         return (
-            <div>
+            <div style={containerStyle}>
                 {
                     state.events.data.map((item) => <SiteState key={eventCount++} event={item} />)
                 }

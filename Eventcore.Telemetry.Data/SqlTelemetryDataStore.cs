@@ -15,20 +15,20 @@ namespace Eventcore.Telemetry.Data
     /// <typeparam name="TContext">The data type of the telemetry event context object.</typeparam>
     public class SqlTelemetryDataStore<TContext> : ITelemetryDataStore<TContext>
     {
-        private MySqlConnection sqlConnection;
+        private readonly string sqlConnectionString;
         private readonly object lockObject = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SqlTelemetryDataStore{TContext}"/> class.
         /// </summary>
-        public SqlTelemetryDataStore(MySqlConnection connection)
+        public SqlTelemetryDataStore(string connectionString)
         {
-            if (connection == null)
+            if (connectionString == null)
             {
-                throw new ArgumentException("The SQL connection parameter is required.", nameof(connection));
+                throw new ArgumentException("The SQL connection string parameter is required.", nameof(connectionString));
             }
 
-            this.sqlConnection = connection;
+            this.sqlConnectionString = connectionString;
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Eventcore.Telemetry.Data
         {
             try
             {
-                using (MySqlConnection connection = new MySqlConnection(this.sqlConnection.ConnectionString))
+                using (MySqlConnection connection = new MySqlConnection(this.sqlConnectionString))
                 {
                     using (MySqlCommand command = connection.CreateCommand())
                     {
@@ -60,7 +60,6 @@ namespace Eventcore.Telemetry.Data
                         command.Parameters.Add(new MySqlParameter("@CorrelationId", telemetry.CorrelationId));
                         command.Parameters.Add(new MySqlParameter("@Context", eventContext));
 
-                        // await this.OpenDatabaseConnectionAsync().ConfigureAwait(false);
                         await connection.OpenAsync().ConfigureAwait(false);
                         await command.ExecuteNonQueryAsync().ConfigureAwait(false);
                     }
@@ -69,10 +68,6 @@ namespace Eventcore.Telemetry.Data
             catch
             {
                 throw;
-            }
-            finally
-            {
-                // await this.CloseDatabaseConnectionAsync().ConfigureAwait(false);
             }
         }
 
@@ -86,7 +81,7 @@ namespace Eventcore.Telemetry.Data
 
             try
             {
-                using (MySqlConnection connection = new MySqlConnection(this.sqlConnection.ConnectionString))
+                using (MySqlConnection connection = new MySqlConnection(this.sqlConnectionString))
                 {
                     using (MySqlCommand command = connection.CreateCommand())
                     {
@@ -161,32 +156,8 @@ namespace Eventcore.Telemetry.Data
             {
                 throw;
             }
-            finally
-            {
-                // await this.CloseDatabaseConnectionAsync().ConfigureAwait(false);
-            }
 
             return events;
-        }
-
-        private Task CloseDatabaseConnectionAsync()
-        {
-            if (this.sqlConnection.State != ConnectionState.Closed)
-            {
-                return this.sqlConnection.CloseAsync();
-            }
-
-            return Task.CompletedTask;
-        }
-
-        private Task OpenDatabaseConnectionAsync()
-        {
-            if (this.sqlConnection.State != ConnectionState.Open)
-            {
-                return this.sqlConnection.OpenAsync();
-            }
-
-            return Task.CompletedTask;
         }
     }
 }

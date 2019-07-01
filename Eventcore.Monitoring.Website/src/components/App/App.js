@@ -7,7 +7,7 @@ import * as siteState from 'SiteState';
 import { telemetryEventReducer } from 'SiteStateActions';
 
 import HeaderContainer from './Header/HeaderContainer.js';
-//import HomeContainer from './Home/HomeContainer.js';
+import HomeContainer from './Home/HomeContainer.js';
 import StatusContainer from './Status/StatusContainer.js';
 import AdminLogIn from './Admin/AdminLogIn.js';
 import AdminFormPage from './Admin/AdminFormPage.js';
@@ -25,7 +25,9 @@ function App() {
                     <Route
                         exact path="/"
                         render={(props) => (
-                            <StatusContainer apiUri="http://127.0.0.1:5000" state={initialState.events} />
+                            <HomeContainer>
+                                <StatusContainer apiUri="http://127.0.0.1:5000" state={initialState.events} />
+                            </HomeContainer>
                         )}
                     />
                     <Route path="/AdminLogIn" render={(props) => (<AdminLogIn />)} />
