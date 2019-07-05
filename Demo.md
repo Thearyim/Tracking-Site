@@ -84,7 +84,7 @@ and how the monitoring website can use the Telemetry API to read telemetry event
 Note:  
 The 'correlation ID' is an identifier used to group a set of individual calls to websites together.
 
-``` json
+```json
 POST http://localhost:5000/api/telemetry
 
 {
