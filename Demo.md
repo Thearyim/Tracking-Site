@@ -84,7 +84,7 @@ and how the monitoring website can use the Telemetry API to read telemetry event
 Note:  
 The 'correlation ID' is an identifier used to group a set of individual calls to websites together.
 
-```json
+```
 POST http://localhost:5000/api/telemetry
 
 {
@@ -103,7 +103,7 @@ POST http://localhost:5000/api/telemetry
 
 * **Then get the latest telemetry to show this event**  
 
-``` json
+```
 GET http://localhost:5000/api/telemetry?eventName=WebsiteAvailabilityCheck&latest=true
 
 ```

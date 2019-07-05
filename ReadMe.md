@@ -30,7 +30,7 @@ provides guidance on configuring the environment.
 The following configuration settings are used to configure the Synthetic Transaction Service host executable. These
 settings are placed in an 'appSettings.json' file alongside the executable.
 
-``` json
+```
 {
   "Logging": {
     "LogLevel": {
@@ -47,18 +47,25 @@ settings are placed in an 'appSettings.json' file alongside the executable.
 **Test Environment**  
 The following JSON content is the configuration settings for the synthetic transactions in the Test environment:
 
-```json
+```
 {
   "Id": "test",
   "SyntheticTransactions": {
     "WebsiteAvailability": {
-	  "RunInterval": "00:01:00",
-      "SiteUrls": [
-        "https://www.eventcore.com",
-        "https://www.google.com"
+      "RunInterval": "00:00:15",
+      "Sites": [
+        {
+          "name": "Eventcore",
+          "url": "https://www.eventcore.com"
+        },
+        {
+          "name": "Microsoft",
+          "url": "https://www.microsoft.com"
+        }
       ]
     }
   }
+}
 }
 ```
 
