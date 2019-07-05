@@ -18,12 +18,30 @@ export default class TelemetryClient {
         this.telemetryApiUri = apiUri;
     }
 
-    async getLatestEvents(eventName) {
-        let targetUri = `${this.telemetryApiUri}/api/telemetry?eventName=${eventName}&latest=true`;
+    async getEvents(eventName = null, latest = null) {
+        let targetUri = `${this.telemetryApiUri}/api/telemetry`;
         let result = {
             data: null,
             error: null
         };
+
+        // Format:
+        // http://www.eventcore.com:5000/api/telemetry
+        // http://www.eventcore.com:5000/api/telemetry?eventName=WebsiteAvailabilityCheck
+        // http://www.eventcore.com:5000/api/telemetry?eventName=WebsiteAvailabilityCheck&latest=true
+        //
+        if (eventName != null && latest != null) {
+            let queryParameters = [];
+            if (eventName != null) {
+                queryParameters.push(`eventName=${eventName}`);
+            }
+
+            if (latest != null) {
+                queryParameters.push(`latest=${latest}`);
+            }
+
+            targetUri += `?${queryParameters.join('&')}`;
+        }
 
         console.log(`Get latest telemetry events: ${targetUri}`);
 

@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Eventcore.Monitoring.SyntheticTransactionService.Transactions;
+using Eventcore.SyntheticTransactionService.Transactions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Eventcore.Monitoring.SyntheticTransactionService
+namespace Eventcore.SyntheticTransactionService
 {
     public class SyntheticTransactionService : IHostedService
     {

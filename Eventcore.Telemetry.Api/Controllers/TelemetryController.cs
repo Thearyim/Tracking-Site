@@ -60,9 +60,10 @@ namespace Eventcore.Telemetry.Api.Controllers
         //    'correlationId': 'e915e981-92ae-4968-84c1-52437f3c265a',
         //    'timestamp' : '2019-06-11T00:00:00.0000000Z',
         //    'context': {
+        //      'name' : 'Eventcore',
+        //      'url' : 'https://www.eventcore.com/',
         //      'status' : 'OK',
-        //      'statusCode': 200,
-        //      'url' : 'https://www.eventcore.com/'
+        //      'statusCode': 200
         //    }
         // }
         [HttpPost]

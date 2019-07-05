@@ -6,15 +6,12 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Eventcore.Monitoring.SyntheticTransactionService
+namespace Eventcore.SyntheticTransactionService
 {
     class Program
     {
@@ -90,22 +87,43 @@ namespace Eventcore.Monitoring.SyntheticTransactionService
 
             using (HttpClient configurationClient = new HttpClient())
             {
-                HttpResponseMessage response = configurationClient.GetAsync(configurationApiUri)
-                    .GetAwaiter().GetResult();
-
-                if (response.IsSuccessStatusCode)
+                bool configurationLoaded = false;
+                while (!configurationLoaded && !Program.CancellationTokenSource.IsCancellationRequested)
                 {
-                    string jsonContent = response.Content.ReadAsStringAsync()
-                        .GetAwaiter().GetResult();
-
-                    IDictionary<string, string> settings = new Dictionary<string, string>
+                    try
                     {
-                        [Constants.SyntheticTransactions] = JToken.Parse(jsonContent).SelectToken(Constants.SyntheticTransactions).ToString()
-                    };
+                        HttpResponseMessage response = configurationClient.GetAsync(configurationApiUri)
+                            .GetAwaiter().GetResult();
 
-                    configuration = new ConfigurationBuilder()
-                        .AddInMemoryCollection(settings)
-                        .Build();
+                        if (response.IsSuccessStatusCode)
+                        {
+                            string jsonContent = response.Content.ReadAsStringAsync()
+                                .GetAwaiter().GetResult();
+
+                            IDictionary<string, string> settings = new Dictionary<string, string>
+                            {
+                                [Constants.SyntheticTransactions] = JToken.Parse(jsonContent).SelectToken(Constants.SyntheticTransactions).ToString()
+                            };
+
+                            configuration = new ConfigurationBuilder()
+                                .AddInMemoryCollection(settings)
+                                .Build();
+
+                            configurationLoaded = true;
+                        }
+                    }
+                    catch (Exception exc)
+                    {
+                        Program.Logger.LogWarning($"Error while loading configuration: ${exc.Message}");
+                        Program.Logger.LogWarning($"Continuing to attempt loading configuration...");
+                    }
+                    finally
+                    {
+                        if (!configurationLoaded)
+                        {
+                            Thread.Sleep(2000);
+                        }
+                    }
                 }
             }
 

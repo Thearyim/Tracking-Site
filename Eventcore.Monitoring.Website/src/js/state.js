@@ -2,8 +2,12 @@
  */
 
 export const initialState = {
-    events: {
+    siteEvents: {
         id: 'events',
+        data: []
+    },
+    siteStatus: {
+        id: 'eventStatus',
         data: []
     }
 }

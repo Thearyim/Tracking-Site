@@ -1,4 +1,4 @@
-﻿namespace Eventcore.Monitoring.SyntheticTransactionService
+﻿namespace Eventcore.SyntheticTransactionService
 {
     public static class Constants
     {
@@ -12,7 +12,7 @@
 
         public const string RunInterval = "RunInterval";
 
-        public const string SiteUrls = "SiteUrls";
+        public const string Sites = "Sites";
 
         public const string SyntheticTransactions = "SyntheticTransactions";
 

@@ -1,0 +1,8 @@
+﻿.status-waiting {
+    margin: 30px;
+}
+
+.status-error {
+    color: #AA0000;
+    margin: 30px;
+}

@@ -4,4 +4,31 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="build\**" />
+    <Compile Remove="lib\**" />
+    <Compile Remove="node_modules\**" />
+    <EmbeddedResource Remove="build\**" />
+    <EmbeddedResource Remove="lib\**" />
+    <EmbeddedResource Remove="node_modules\**" />
+    <None Remove="build\**" />
+    <None Remove="lib\**" />
+    <None Remove="node_modules\**" />
+  </ItemGroup>
+  
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), BuildEnv.props))\BuildEnv.props" />
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="npm run build" />
+  </Target>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="robocopy /s $(ProjectDir) $(OutDir.TrimEnd('\')) *.* /xd deployment /xf *.csproj &amp;&#xD;&#xA;robocopy /s $(ProjectDir)\deployment $(OutDir)..\ *.ps1" IgnoreExitCode="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+
+    <Message Importance="High" Text="File copy exit code: $(ErrorCode)" />
+    <Message Importance="High" Text="File copy failed!!" Condition="$(ErrorCode) &gt; 8" />
+  </Target>
+
 </Project>

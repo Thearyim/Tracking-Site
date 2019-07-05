@@ -10,13 +10,13 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Eventcore.Monitoring.SyntheticTransactionService.Transactions
+namespace Eventcore.SyntheticTransactionService.Transactions
 {
     public class WebsiteAvailabilityCheck : ISyntheticTransaction
     {
         private Uri telemetryApiUri;
         private TimeSpan runInterval;
-        private List<string> siteUrls;
+        private List<Dictionary<string, string>> sites;
 
         public async Task ExecuteAsync(IConfiguration configuration, CancellationToken cancellationToken)
         {
@@ -29,8 +29,8 @@ namespace Eventcore.Monitoring.SyntheticTransactionService.Transactions
         private void InitializeRunSettings(IConfiguration configuration)
         {
             JToken transactionConfiguration = JToken.Parse(configuration.GetValue<string>(Constants.SyntheticTransactions));
-            this.siteUrls = transactionConfiguration.SelectToken($"{Constants.WebsiteAvailability}.{Constants.SiteUrls}")
-                .ToObject<List<string>>();
+            this.sites = transactionConfiguration.SelectToken($"{Constants.WebsiteAvailability}.{Constants.Sites}")
+                .ToObject<List<Dictionary<string, string>>>();
 
             this.runInterval = TimeSpan.Parse(
                 transactionConfiguration.SelectToken($"{Constants.WebsiteAvailability}.{Constants.RunInterval}").ToString());
@@ -49,15 +49,18 @@ namespace Eventcore.Monitoring.SyntheticTransactionService.Transactions
                     try
                     {
                         Guid correlationId = Guid.NewGuid();
-                        foreach (string site in this.siteUrls)
+                        foreach (IDictionary<string, string> site in this.sites)
                         {
                             if (!cancellationToken.IsCancellationRequested)
                             {
                                 HttpResponseMessage response = null;
 
+                                string siteName = site["name"];
+                                string siteUrl = site["url"];
+
                                 try
                                 {
-                                    response = await this.ExecuteSiteAvailabilityCheckAsync(httpClient, site, cancellationToken)
+                                    response = await this.ExecuteSiteAvailabilityCheckAsync(httpClient, siteUrl, cancellationToken)
                                         .ConfigureAwait(false);
                                 }
                                 catch (HttpRequestException exc)
@@ -66,7 +69,7 @@ namespace Eventcore.Monitoring.SyntheticTransactionService.Transactions
                                     response = new HttpResponseMessage(System.Net.HttpStatusCode.NotFound);
                                 }
 
-                                await this.WriteTelemetryAsync(httpClient, response, site, correlationId, cancellationToken)
+                                await this.WriteTelemetryAsync(httpClient, response, siteName, siteUrl, correlationId, cancellationToken)
                                     .ConfigureAwait(false);
                             }
                         }
@@ -97,7 +100,7 @@ namespace Eventcore.Monitoring.SyntheticTransactionService.Transactions
             return response;            
         }
 
-        private async Task WriteTelemetryAsync(HttpClient httpClient, HttpResponseMessage siteResponse, string site, Guid correlationId, CancellationToken cancellationToken)
+        private async Task WriteTelemetryAsync(HttpClient httpClient, HttpResponseMessage siteResponse, string siteName, string siteUrl, Guid correlationId, CancellationToken cancellationToken)
         {
             TelemetryEvent<IDictionary<string, object>> telemetry = new TelemetryEvent<IDictionary<string, object>>(
                 "WebsiteAvailabilityCheck",
@@ -105,7 +108,8 @@ namespace Eventcore.Monitoring.SyntheticTransactionService.Transactions
                 DateTime.UtcNow,
                 new Dictionary<string, object>
                 {
-                    ["url"] = site,
+                    ["name"] = siteName,
+                    ["url"] = siteUrl,
                     ["status"] = siteResponse.StatusCode.ToString(),
                     ["statusCode"] = (int)siteResponse.StatusCode
                 });

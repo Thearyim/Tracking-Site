@@ -1,0 +1,138 @@
+﻿.eventTable {
+    border-radius: 5px;
+}
+
+.eventTable thead {
+    background-image: linear-gradient(#A9D0F5, #B9E0F5);
+    padding: 3px;
+    border: 1px solid #BBB;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.eventTable thead tr th {
+    padding: 3px 5px 3px 5px;
+}
+
+.eventTable tbody tr td {
+    border: 1px solid #BBB;
+}
+
+.eventTable tbody tr td img {
+    text-align: center;
+}
+
+.eventStatus {
+    display: flex;
+}
+
+@media (max-width: 500px) {
+    .eventTableContainer {
+        width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .eventTable {
+        font-size: 8pt;
+        margin-top: 10px;
+    }
+
+    .eventTable thead tr th:last-child {
+        display: none;
+    }
+
+    .eventTable tbody tr td {
+        padding: 3px;
+    }
+
+    .eventTable tbody tr td:nth-child(2) {
+        width: 50%;
+    }
+
+    .eventTable tbody tr td:nth-child(3) {
+        width: 50%;
+    }
+
+    .eventTable tbody tr td:last-child {
+        display: none;
+    }
+
+    .eventTable tbody tr td img {
+        height: 15px;
+        margin-right: 3px;
+    }
+}
+
+@media (min-width: 501px) and (max-width: 768px) {
+    .eventTableContainer {
+        width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .eventTable {
+        font-size: 9pt;
+        margin-top: 15px;
+    }
+
+    .eventTable thead tr th:last-child {
+        display: none;
+    }
+
+    .eventTable tbody tr td {
+        padding: 3px;
+    }
+
+    .eventTable tbody tr td:nth-child(2) {
+        width: 50%;
+    }
+
+    .eventTable tbody tr td:nth-child(3) {
+        width: 50%;
+    }
+
+    .eventTable tbody tr td:first-child {
+        min-width: 200px;
+    }
+
+    .eventTable tbody tr td:last-child {
+        display: none;
+    }
+
+    .eventTable tbody tr td img {
+        height: 18px;
+        margin-right: 5px;
+    }
+}
+
+@media (min-width: 769px) {
+    .eventTableContainer {
+        width: 100%;
+        margin-left: 50px;
+        margin-right: 50px;
+    }
+
+    .eventTable {
+        font-size: 10pt;
+        margin-top: 25px;
+    }
+
+    .eventTable tbody tr td {
+        padding: 5px;
+        min-width: 175px;
+    }
+
+    .eventTable tbody tr td:first-child {
+        min-width: 250px;
+    }
+
+    .eventTable tbody tr td:last-child {
+        width: 100%;
+    }
+
+    .eventTable tbody tr td img {
+        height: 20px;
+        margin-right: 5px;
+    }
+}

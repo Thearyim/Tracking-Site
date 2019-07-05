@@ -1,0 +1,30 @@
+{
+  "Id": "test",
+  "SyntheticTransactions": {
+    "WebsiteAvailability": {
+      "RunInterval": "00:00:15",
+      "Sites": [
+        {
+          "name": "Eventcore",
+          "url": "https://www.eventcore.com"
+        },
+        {
+          "name": "Google Search",
+          "url": "https://www.google.com"
+        },
+        {
+          "name": "ICHS",
+          "url": "https://www.ichs.com"
+        },
+        {
+          "name": "Microsoft",
+          "url": "https://www.microsoft.com"
+        },
+        {
+          "name": "Non-Existent Site",
+          "url": "https://www.this.site.does.not.exist.com"
+        }
+      ]
+    }
+  }
+}

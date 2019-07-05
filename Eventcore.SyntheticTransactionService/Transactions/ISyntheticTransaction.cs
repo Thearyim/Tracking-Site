@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 
-namespace Eventcore.Monitoring.SyntheticTransactionService.Transactions
+namespace Eventcore.SyntheticTransactionService.Transactions
 {
     public interface ISyntheticTransaction
     {

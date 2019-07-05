@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <!-- 
+  Reference Links:
+  
+  MSBuild Reserved and Well-Known Properties
+  https://msdn.microsoft.com/en-us/library/ms164309.aspx
+  
+  Common MSBuild Project Properties
+  https://msdn.microsoft.com/en-us/library/bb629394.aspx
+  
+  Common MSBuild Project Items
+  https://msdn.microsoft.com/en-us/library/bb629388.aspx
+  
+  MSBuild Command-Line Reference
+  https://msdn.microsoft.com/en-us/library/ms164311.aspx
+  
+  MSBuild Property Function Reference
+  https://msdn.microsoft.com/en-us/library/dd633440.aspx
+  
+  Target Frameworks
+  https://docs.microsoft.com/en-us/nuget/schema/target-frameworks
+  https://docs.microsoft.com/en-us/dotnet/standard/net-standard
+  -->
+
+    <!-- *****************************************************************************
+         Build Environment/Repo Core Directory Paths
+         
+         Note:
+         These settings can be overriden in either the Module.props file for a solution or
+         within a specific project file
+         
+         Important:
+         The 'RepoPath' property is defined in the Repo.props file that MUST be in the root
+         of each individual repo.
+         
+        **********************************************************************************
+    -->
+    <PropertyGroup>
+        
+        <!--
+        The path to the build environment source root (e.g. contains all of the build environment settings files).
+        By default the build environment path is the same as the repo path.  If a Git submodule is used to provide
+        the build environment settings, this path will be a subdirectory within the repo.
+        
+        ex: S:\buildRoot\repo
+            S:\buildRoot\buildEnv
+        -->
+        <RepoPath>$([MSBuild]::ValueOrDefault($(MSBuildThisFileDirectory), '.\').TrimEnd('\'))</RepoPath>
+
+        <!--
+        The root bin/output path where binary files generated during build are output for all projects
+        within the repo.
+        
+        ex:  S:\Source\repo.bin
+        -->
+        <BuildBinPath Condition="'$(BuildBinPath)' == ''">$(RepoPath).bin</BuildBinPath>
+
+        <!--
+        The root obj/intermediates file path where files generated during build are output for all projects
+        within the repo.
+        
+        ex:  S:\Source\repo.obj
+        -->
+      <BuildIntermediatesPath Condition="'$(BuildIntermediatesPath)' == ''">$(RepoPath).obj</BuildIntermediatesPath>
+
+    </PropertyGroup>
+
+
+    <!-- **********************************************************************
+         .NET Framework Platform Distinction
+      *********************************************************************** -->
+    <PropertyGroup>
+        <IsDotNetCore>false</IsDotNetCore>
+        <IsDotNetStandard>false</IsDotNetStandard>
+        <IsDotNetCore Condition="$(TargetFramework.StartsWith('netcoreapp'))">true</IsDotNetCore>
+        <IsDotNetStandard Condition="$(TargetFramework.StartsWith('netstandard'))">true</IsDotNetStandard>
+    </PropertyGroup>
+
+
+    <!-- *****************************************************************************
+         .NET Full Framework
+         Project build intermediates file output paths
+        
+         Examples:
+         S:\environment\repo.obj\Debug
+         S:\environment\repo.obj\Debug\x86
+         S:\environment\repo.obj\Debug\x64
+    ********************************************************************************** -->
+    <PropertyGroup Condition="'$(IsDotNetCore)' != 'true' and '$(IsDotNetStandard)' != 'true'">
+        <BaseIntermediateOutputPath Condition="'$(Platform)' == 'AnyCPU'">$(BuildIntermediatesPath)\$(Configuration)\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+        <BaseIntermediateOutputPath Condition="'$(Platform)' != 'AnyCPU'">$(BuildIntermediatesPath)\$(Configuration)\$(Platform)\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+        <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
+        <IntDir>$(IntermediateOutputPath)</IntDir>
+    </PropertyGroup>
+
+
+    <!-- *****************************************************************************
+         .NET Core/Standard Framework
+         Project build intermediates output paths
+        
+         Examples:
+         S:\environment\repo.obj\Debug
+         S:\environment\repo.obj\Debug\x86
+         S:\environment\repo.obj\Debug\x64
+    ********************************************************************************** -->
+    <PropertyGroup Condition="'$(IsDotNetCore)' == 'true' or '$(IsDotNetStandard)' == 'true'">
+        <IntermediateOutputPath Condition="'$(Platform)' == 'AnyCPU'">$(BuildIntermediatesPath)\$(Configuration)\$(MSBuildProjectName)\</IntermediateOutputPath>
+        <IntermediateOutputPath Condition="'$(Platform)' != 'AnyCPU'">$(BuildIntermediatesPath)\$(Configuration)\$(Platform)\$(MSBuildProjectName)\</IntermediateOutputPath>
+        <IntDir>$(IntermediateOutputPath)</IntDir>
+    </PropertyGroup>
+
+
+    <!-- *****************************************************************************
+         Project build bin/output paths
+        
+         Examples:
+         S:\environment\repo.bin\Debug
+         S:\environment\repo.bin\Debug\x86
+         S:\environment\repo.bin\Debug\x64
+      ********************************************************************************** -->
+    <PropertyGroup>
+        <OutputPath Condition="'$(Platform)' == 'AnyCPU'">$(BuildBinPath)\$(Configuration)\$(MSBuildProjectName)\</OutputPath>
+        <OutputPath Condition="'$(Platform)' != 'AnyCPU'">$(BuildBinPath)\$(Configuration)\$(Platform)\$(MSBuildProjectName)\</OutputPath>
+        <OutDir Condition="'$(IsDotNetCore)' == 'true' or '$(IsDotNetStandard)' == 'true'">$(OutputPath)</OutDir>
+    </PropertyGroup>
+
+</Project>
+

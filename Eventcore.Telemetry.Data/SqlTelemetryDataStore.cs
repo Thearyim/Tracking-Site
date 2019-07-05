@@ -88,12 +88,12 @@ namespace Eventcore.Telemetry.Data
                         command.CommandType = System.Data.CommandType.Text;
                         command.CommandText =
                             @"SELECT
-                            Timestamp,
-                            EventName,
-                            CorrelationId,
-                            Context
-                          FROM TelemetryEvents 
-                          WHERE 1";
+                                Timestamp,
+                                EventName,
+                                CorrelationId,
+                                Context
+                              FROM TelemetryEvents 
+                              WHERE 1";
 
                         if (filter != null && filter.IsSet)
                         {
@@ -118,7 +118,7 @@ namespace Eventcore.Telemetry.Data
                                           WHERE EventName = '{filter.EventName}'
                                           ORDER BY Id DESC
                                           LIMIT 1
-                                      )";
+                                      ) ORDER BY TIMESTAMP DESC";
                                 }
                                 else
                                 {
@@ -128,13 +128,13 @@ namespace Eventcore.Telemetry.Data
                                           SELECT CorrelationId FROM TelemetryEvents
                                           ORDER BY Id DESC
                                           LIMIT 1
-                                      )";
+                                      ) ORDER BY TIMESTAMP DESC";
                                 }
                             }
                         }
                         else
                         {
-                            command.CommandText += " LIMIT 1000";
+                            command.CommandText += " ORDER BY TIMESTAMP DESC LIMIT 300";
                         }
 
                         await connection.OpenAsync().ConfigureAwait(false);
