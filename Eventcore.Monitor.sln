@@ -18,6 +18,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventcore.Telemetry.Data", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eventcore.SyntheticTransactionService", "Eventcore.SyntheticTransactionService\Eventcore.SyntheticTransactionService.csproj", "{983C97F7-A12F-4497-92F4-33A558A5FDA1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventcore.Telemetry.Api.UnitTests", "Eventcore.Telemetry.Api.UnitTests\Eventcore.Telemetry.Api.UnitTests.csproj", "{23E1C6BC-A933-4E7A-8189-F32F11522AC0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eventcore.Telemetry.Data.Tests", "Eventcore.Telemetry.Data.Tests\Eventcore.Telemetry.Data.Tests.csproj", "{3F180BFB-14A3-42BD-8D15-4B6DC8D68F7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +44,14 @@ Global
 		{983C97F7-A12F-4497-92F4-33A558A5FDA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{983C97F7-A12F-4497-92F4-33A558A5FDA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{983C97F7-A12F-4497-92F4-33A558A5FDA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23E1C6BC-A933-4E7A-8189-F32F11522AC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23E1C6BC-A933-4E7A-8189-F32F11522AC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23E1C6BC-A933-4E7A-8189-F32F11522AC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23E1C6BC-A933-4E7A-8189-F32F11522AC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F180BFB-14A3-42BD-8D15-4B6DC8D68F7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F180BFB-14A3-42BD-8D15-4B6DC8D68F7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F180BFB-14A3-42BD-8D15-4B6DC8D68F7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F180BFB-14A3-42BD-8D15-4B6DC8D68F7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

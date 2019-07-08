@@ -41,25 +41,8 @@ namespace Eventcore.Telemetry.Data
             {
                 using (MySqlConnection connection = new MySqlConnection(this.sqlConnectionString))
                 {
-                    using (MySqlCommand command = connection.CreateCommand())
+                    using (MySqlCommand command = this.CreateTelemetryInsertCommand(connection, telemetry))
                     {
-                        command.CommandType = System.Data.CommandType.Text;
-                        command.CommandText =
-                            @"INSERT INTO TelemetryEvents
-                      (Timestamp, EventName, CorrelationId, Context)
-                      VALUES (@Timestamp, @EventName, @CorrelationId, @Context)";
-
-                        string eventContext = null;
-                        if (telemetry.Context != null)
-                        {
-                            eventContext = JsonConvert.SerializeObject(telemetry.Context, TelemetryEvent<TContext>.SerializationSettings);
-                        }
-
-                        command.Parameters.Add(new MySqlParameter("@Timestamp", telemetry.Timestamp));
-                        command.Parameters.Add(new MySqlParameter("@EventName", telemetry.EventName));
-                        command.Parameters.Add(new MySqlParameter("@CorrelationId", telemetry.CorrelationId));
-                        command.Parameters.Add(new MySqlParameter("@Context", eventContext));
-
                         await connection.OpenAsync().ConfigureAwait(false);
                         await command.ExecuteNonQueryAsync().ConfigureAwait(false);
                     }
@@ -83,70 +66,21 @@ namespace Eventcore.Telemetry.Data
             {
                 using (MySqlConnection connection = new MySqlConnection(this.sqlConnectionString))
                 {
-                    using (MySqlCommand command = connection.CreateCommand())
+                    using (MySqlCommand command = this.CreateTelemetrySearchCommand(connection, filter))
                     {
-                        command.CommandType = System.Data.CommandType.Text;
-                        command.CommandText =
-                            @"SELECT
-                                Timestamp,
-                                EventName,
-                                CorrelationId,
-                                Context
-                              FROM TelemetryEvents 
-                              WHERE 1";
-
-                        if (filter != null && filter.IsSet)
-                        {
-                            if (filter.CorrelationId != null)
-                            {
-                                command.CommandText += $" AND CorrelationId = '{filter.CorrelationId}'";
-                            }
-
-                            if (filter.EventName != null)
-                            {
-                                command.CommandText += $" AND EventName = '{filter.EventName}'";
-                            }
-
-                            if (filter.Latest == true)
-                            {
-                                if (filter.EventName != null)
-                                {
-                                    command.CommandText +=
-                                      $@" AND CorrelationId =
-                                      (
-                                          SELECT CorrelationId FROM TelemetryEvents
-                                          WHERE EventName = '{filter.EventName}'
-                                          ORDER BY Id DESC
-                                          LIMIT 1
-                                      ) ORDER BY TIMESTAMP DESC";
-                                }
-                                else
-                                {
-                                    command.CommandText +=
-                                      $@" AND CorrelationId =
-                                      (
-                                          SELECT CorrelationId FROM TelemetryEvents
-                                          ORDER BY Id DESC
-                                          LIMIT 1
-                                      ) ORDER BY TIMESTAMP DESC";
-                                }
-                            }
-                        }
-                        else
-                        {
-                            command.CommandText += " ORDER BY TIMESTAMP DESC LIMIT 300";
-                        }
-
                         await connection.OpenAsync().ConfigureAwait(false);
-                        using (DbDataReader reader = await command.ExecuteReaderAsync().ConfigureAwait(false))
+                        using (IDataReader reader = await command.ExecuteReaderAsync().ConfigureAwait(false))
                         {
-                            while (reader.Read())
+                            if (reader != null)
                             {
-                                events.Add(new TelemetryEvent<TContext>(
-                                    eventName: reader.GetString(1),
-                                    correlationId: reader.GetGuid(2),
-                                    timestamp: reader.GetDateTime(0),
-                                    context: JsonConvert.DeserializeObject<TContext>(reader.GetString(3), TelemetryEvent<TContext>.SerializationSettings)));
+                                while (reader.Read())
+                                {
+                                    events.Add(new TelemetryEvent<TContext>(
+                                        eventName: reader.GetString(1),
+                                        correlationId: reader.GetGuid(2),
+                                        timestamp: reader.GetDateTime(0),
+                                        context: JsonConvert.DeserializeObject<TContext>(reader.GetString(3), TelemetryEvent<TContext>.SerializationSettings)));
+                                }
                             }
                         }
                     }
@@ -157,7 +91,88 @@ namespace Eventcore.Telemetry.Data
                 throw;
             }
 
-            return events;
+            return events as IEnumerable<TelemetryEvent<TContext>>;
+        }
+
+        protected MySqlCommand CreateTelemetryInsertCommand(MySqlConnection connection, TelemetryEvent<TContext> telemetry)
+        {
+            MySqlCommand command = connection.CreateCommand();
+            command.CommandType = System.Data.CommandType.Text;
+            command.CommandText =
+                @"INSERT INTO TelemetryEvents
+                (Timestamp, EventName, CorrelationId, Context)
+                VALUES (@Timestamp, @EventName, @CorrelationId, @Context)";
+
+            string eventContext = null;
+            if (telemetry.Context != null)
+            {
+                eventContext = JsonConvert.SerializeObject(telemetry.Context, TelemetryEvent<TContext>.SerializationSettings);
+            }
+
+            command.Parameters.Add(new MySqlParameter("@Timestamp", telemetry.Timestamp));
+            command.Parameters.Add(new MySqlParameter("@EventName", telemetry.EventName));
+            command.Parameters.Add(new MySqlParameter("@CorrelationId", telemetry.CorrelationId));
+            command.Parameters.Add(new MySqlParameter("@Context", eventContext));
+
+            return command;
+        }
+
+        protected MySqlCommand CreateTelemetrySearchCommand(MySqlConnection connection, FilterOptions filter)
+        {
+            MySqlCommand command = connection.CreateCommand();
+            command.CommandType = System.Data.CommandType.Text;
+            command.CommandText =
+                @"SELECT
+                Timestamp,
+                EventName,
+                CorrelationId,
+                Context
+                FROM TelemetryEvents 
+                WHERE 1";
+
+            if (filter != null && filter.IsSet)
+            {
+                if (filter.CorrelationId != null)
+                {
+                    command.CommandText += $" AND CorrelationId = '{filter.CorrelationId}'";
+                }
+
+                if (filter.EventName != null)
+                {
+                    command.CommandText += $" AND EventName = '{filter.EventName}'";
+                }
+
+                if (filter.Latest == true)
+                {
+                    if (filter.EventName != null)
+                    {
+                        command.CommandText +=
+                          $@" AND CorrelationId =
+                            (
+                                SELECT CorrelationId FROM TelemetryEvents
+                                WHERE EventName = '{filter.EventName}'
+                                ORDER BY Id DESC
+                                LIMIT 1
+                            ) ORDER BY TIMESTAMP DESC";
+                    }
+                    else
+                    {
+                        command.CommandText +=
+                          $@" AND CorrelationId =
+                            (
+                                SELECT CorrelationId FROM TelemetryEvents
+                                ORDER BY Id DESC
+                                LIMIT 1
+                            ) ORDER BY TIMESTAMP DESC";
+                    }
+                }
+            }
+            else
+            {
+                command.CommandText += " ORDER BY TIMESTAMP DESC LIMIT 300";
+            }
+
+            return command;
         }
     }
 }
